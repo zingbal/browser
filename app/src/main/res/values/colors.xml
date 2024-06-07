@@ -3,11 +3,12 @@
 <resources>
 
     <color name="primaryColor">#7cb342</color>
-    <color name="primaryDarkColor">#424242</color>
+    <color name="primaryDarkColor">#36343B</color>
     <color name="secondaryColor">#7cb342</color>
     <color name="surfaceColorDay">#DDDDDD</color>
     <color name="surfaceColorNight">#222222</color>
     <color name="lightColor">#fafafa</color>
     <color name="hintColor">#BDBDBD</color>
+    <color name="secondaryContainerColor">#507cb342</color>
 
 </resources>

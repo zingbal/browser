@@ -23,7 +23,7 @@ import androidx.annotation.OptIn;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.core.content.ContextCompat;
+
 import androidx.preference.PreferenceManager;
 
 import android.os.Handler;
@@ -286,7 +286,11 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
         };
 
         IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-        registerReceiver(downloadReceiver, filter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(downloadReceiver, filter, Context.RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(downloadReceiver, filter);
+        }
 
         mLastContentHeight = findViewById(Window.ID_ANDROID_CONTENT).getHeight();
 
@@ -1904,7 +1908,6 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
         }
 
         builderSubMenu.setView(dialogViewSubMenu);
-        builderSubMenu.setTitle(getString(R.string.menu_edit));
         builderSubMenu.setPositiveButton(R.string.app_ok, (dialog3, whichButton) -> {
             RecordAction action = new RecordAction(context);
             action.open(true);

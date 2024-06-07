@@ -11,10 +11,8 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -57,7 +55,7 @@ public class CompleteAdapter extends BaseAdapter implements Filterable {
                 }
             }
 
-            Collections.sort(workList, (first, second) -> Integer.compare(first.getIndex(), second.getIndex()));
+            workList.sort(Comparator.comparingInt(CompleteItem::getIndex));
 
             FilterResults results = new FilterResults();
             results.values = workList;
@@ -67,6 +65,7 @@ public class CompleteAdapter extends BaseAdapter implements Filterable {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         protected void publishResults(CharSequence constraint, FilterResults results) {
             if (results != null && results.count > 0) {
                 // The API returned at least one result, update the data.
@@ -102,7 +101,7 @@ public class CompleteAdapter extends BaseAdapter implements Filterable {
             this.index = index;
         }
 
-        private int iconColor;
+        private final int iconColor;
 
         public int getIconColor() { return iconColor; }
 
