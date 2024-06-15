@@ -88,7 +88,7 @@ public class AdBlock {
                      }
                 }
             } catch (IOException i) {
-                Log.w("browser", "Error loading adBlockHosts", i);
+                Log.w("browser", "Error loading AdBlock hosts", i);
             }
         });
         thread.start();
@@ -162,6 +162,9 @@ public class AdBlock {
 
             } catch (IOException i) {
                 Log.w("browser", "Error updating AdBlock hosts", i);
+                ((Activity) context).runOnUiThread(() -> {
+                    Toast.makeText(context, "Error updating AdBlock hosts", Toast.LENGTH_LONG).show();
+                });
             }
         });
         thread.start();

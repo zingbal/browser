@@ -59,10 +59,11 @@ public class BannerBlock {
             JSONObject jsonData = new JSONObject(jsonDataString);
             JSONArray data = jsonData.getJSONArray("data");
             configString = data.toString().replaceAll("\\\\\"", "\\\\\\\\\"");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | JSONException i ) {
+            Log.w("browser", "Error loading cookie banner rules", i);
+            ((Activity) context).runOnUiThread(() -> {
+                Toast.makeText(context, "Error loading cookie banner rules", Toast.LENGTH_LONG).show();
+            });
         }
     }
 
@@ -113,6 +114,9 @@ public class BannerBlock {
 
             } catch (IOException i) {
                 Log.w("browser", "Error updating Mozilla cookie banner rules", i);
+                ((Activity) context).runOnUiThread(() -> {
+                    Toast.makeText(context, "Error updating Mozilla cookie banner rules", Toast.LENGTH_LONG).show();
+                });
             }
         });
         thread.start();
