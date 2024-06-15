@@ -140,10 +140,8 @@ public class BannerBlock {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
                 if (sp.getBoolean("sp_deny_cookie_banners",false)) downloadBanners(context);
             }
+            loadHosts(context);
         }
-
-        loadHosts(context);
-
     }
 
     public static String getBannerBlockScriptPageStarted() {
