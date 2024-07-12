@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.baumann.browser.browser.DataURIParser;
@@ -322,5 +323,45 @@ public class BrowserUnit {
             NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
             return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI));
         }
+    }
+
+    public static String youtubeRedirect(String url, String invidiousDomain) {
+        final Pattern VIDEO_URL_PATTERN = Pattern.compile("https://([^/]+)\\.youtube\\.com/watch\\?(.*)v=([^&]+)");
+        final Pattern YOUTU_BE_URL_PATTERN = Pattern.compile("https://youtu\\.be/([^/]+)");
+        final Pattern SEARCH_URL_PATTERN = Pattern.compile("https://www\\.youtube\\.com/results\\?(.*)search_query=([^&]+)");
+        final Pattern YOUTUBE_DOMAIN_PATTERN = Pattern.compile("https://([^/]+)\\.youtube\\.com/(.*)");
+        final Pattern NOCOOKIE_EMBED_URL_PATTERN = Pattern.compile("https://www\\.youtube-nocookie\\.com/embed/([^/]+)");
+
+        String redirectedUrl = url;
+        if (!invidiousDomain.startsWith("http")) invidiousDomain="https://"+invidiousDomain;
+        invidiousDomain=Uri.parse(invidiousDomain).getHost();
+        if (invidiousDomain==null || invidiousDomain.isEmpty()) return url;
+
+        Matcher matcher = VIDEO_URL_PATTERN.matcher(url);
+        if (matcher.matches()) {
+            redirectedUrl = "https://" + invidiousDomain + "/watch?v=" + matcher.group(3);
+        } else {
+            matcher = YOUTU_BE_URL_PATTERN.matcher(url);
+            if (matcher.matches()) {
+                redirectedUrl = "https://" + invidiousDomain + "/watch?v=" + matcher.group(1);
+            } else {
+                matcher = SEARCH_URL_PATTERN.matcher(url);
+                if (matcher.matches()) {
+                    redirectedUrl = "https://" + invidiousDomain + "/search?q=" + matcher.group(2);
+                } else {
+                    matcher = YOUTUBE_DOMAIN_PATTERN.matcher(url);
+                    if (matcher.matches()) {
+                        redirectedUrl = "https://" + invidiousDomain + "/" + matcher.group(2);
+                    } else {
+                        matcher = NOCOOKIE_EMBED_URL_PATTERN.matcher(url);
+                        if (matcher.matches()) {
+                            redirectedUrl = "https://" + invidiousDomain + "/embed/" + matcher.group(1);
+                        }
+                    }
+                }
+            }
+        }
+
+        return redirectedUrl;
     }
 }

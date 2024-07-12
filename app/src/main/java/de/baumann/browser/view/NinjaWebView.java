@@ -204,6 +204,7 @@ public class NinjaWebView extends WebView implements AlbumController {
             }
 
             CookieManager manager = CookieManager.getInstance();
+           // manager.setAcceptThirdPartyCookies(this,true); //needed for Paypal
             if (cookieHosts.isWhite(url) || sp.getBoolean("sp_cookies", true)) {
                 manager.setAcceptCookie(true);
                 manager.getCookie(url);
@@ -302,6 +303,7 @@ public class NinjaWebView extends WebView implements AlbumController {
         imm.hideSoftInputFromWindow(this.getWindowToken(), 0);
         resetFavicon();
         stopped=false;
+        if (sp.getBoolean("sp_invidious_redirect", false)) url = BrowserUnit.youtubeRedirect(url,sp.getString("sp_invidious_domain", "yewtu.be"));
         super.loadUrl(BrowserUnit.queryWrapper(context, url.trim()), getRequestHeaders(url));
     }
 

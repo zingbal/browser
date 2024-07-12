@@ -478,6 +478,7 @@ public class NinjaWebViewClient extends WebViewClient {
             // handle the url by implementing your logic
             String url = uri.toString();
             if (url.startsWith(BrowserUnit.URL_SCHEME_HTTP) || url.startsWith(BrowserUnit.URL_SCHEME_HTTPS)) {
+                if (sp.getBoolean("sp_invidious_redirect", false)) url = BrowserUnit.youtubeRedirect(url,sp.getString("sp_invidious_domain", "yewtu.be"));
                 ninjaWebView.loadUrl(url);
                 return true;
             } else if (url.startsWith(BrowserUnit.URL_SCHEME_INTENT)) {
@@ -559,6 +560,15 @@ public class NinjaWebViewClient extends WebViewClient {
                     new ByteArrayInputStream("".getBytes())
             );
         }
+
+        if (sp.getBoolean("sp_invidious_redirect", false)) {
+            String redirect = BrowserUnit.youtubeRedirect(String.valueOf(request.getUrl()), sp.getString("sp_invidious_domain", "yewtu.be"));
+            if (!redirect.equals(String.valueOf(request.getUrl()))) {
+                CustomWebResourceRequest newRequest = new CustomWebResourceRequest(Uri.parse(redirect), request.getMethod(), request.getRequestHeaders());
+                return super.shouldInterceptRequest(view, newRequest);
+            }
+        }
+
         return super.shouldInterceptRequest(view, request);
     }
 

@@ -67,6 +67,14 @@
             app:SwitchKey="customHostListSwitch"
             android:title="@string/setting_title_custom_host_list" />
 
+        <org.woheller69.preferences.EditTextSwitchPreference
+            android:selectable="true"
+            app:useSimpleSummaryProvider="true"
+            android:key="sp_invidious_domain"
+            android:defaultValue="yewtu.be"
+            app:SwitchKey="sp_invidious_redirect"
+            android:title="Youtube \u279f Invidious" />
+
     </PreferenceCategory>
 
     <PreferenceCategory >
